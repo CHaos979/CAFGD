@@ -1,0 +1,8 @@
+order,workload,sc_policy,tune,seed,num_pod,cpu_milli,num_gpu,gpu_milli,gpu_type_req
+0,openb_pod_list_gpuspec10,01-Random,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,02-DotProd,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,03-GpuClustering,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,04-GpuPacking,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,05-BestFit,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,06-FGD,0,snapshot,2,120000,8,1000,G2
+0,openb_pod_list_gpuspec10,07-CAFGD,0,snapshot,2,120000,8,1000,G2

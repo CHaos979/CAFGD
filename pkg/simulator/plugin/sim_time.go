@@ -18,7 +18,10 @@ type SimTimePlugin struct {
 	fakeTime *simontype.FakeTime
 }
 
-var _ framework.ReservePlugin = &SimTimePlugin{}
+var (
+	_ framework.ReservePlugin   = &SimTimePlugin{}
+	_ framework.PreFilterPlugin = &SimTimePlugin{}
+)
 
 func NewSimTimePlugin(_ runtime.Object, handle framework.Handle, f *simontype.FakeTime) (framework.Plugin, error) {
 	simTimePlugin := &SimTimePlugin{
@@ -37,6 +40,8 @@ func (plugin *SimTimePlugin) PreFilter(ctx context.Context, state *framework.Cyc
 	plugin.predictTime(pod)
 	return framework.NewStatus(framework.Success)
 }
+
+func (plugin *SimTimePlugin) PreFilterExtensions() framework.PreFilterExtensions { return nil }
 
 func (plugin *SimTimePlugin) Reserve(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) *framework.Status {
 	plugin.Lock()

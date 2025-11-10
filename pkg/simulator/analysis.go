@@ -70,21 +70,21 @@ func (sim *Simulator) ClusterGpuFragReport() {
 		nodeCnt += 1
 	}
 
-	// var idleGpuMilli float64 // milli GPUs idle in the cluster
-	// for _, v := range clusterFragAmount.Data {
-	// 	idleGpuMilli += v
-	// }
-	// log.Debugf("[DEBUG][plugin.ClusterGpuFragReport] idleGpuMilli of %d nodes: %.2f\n", nodeCnt, idleGpuMilli)
+	var idleGpuMilli float64 // milli GPUs idle in the cluster
+	for _, v := range clusterFragAmount.Data {
+		idleGpuMilli += v
+	}
+	log.Debugf("[DEBUG][plugin.ClusterGpuFragReport] idleGpuMilli of %d nodes: %.2f\n", nodeCnt, idleGpuMilli)
 
-	// fragGpuMilli := clusterFragAmount.FragAmountSumExceptQ3()
-	// fragGpuRatio := 100 * fragGpuMilli / idleGpuMilli
-	// q124GpuRatio := 100 * clusterFragAmount.FragAmountSumQ1Q2Q4() / idleGpuMilli
-	// log.Infof("[Report]; Frag amount: %.2f; Frag ratio: %.2f%%; Q124 ratio: %.2f%%; (origin)\n", fragGpuMilli, fragGpuRatio, q124GpuRatio)
-	// log.Infof("[Report]; Frag amount: %.2f; Frag ratio: %.2f%%; (bellman)\n", clusterFragBellman, 100*clusterFragBellman/idleGpuMilli)
+	fragGpuMilli := clusterFragAmount.FragAmountSumExceptQ3()
+	fragGpuRatio := 100 * fragGpuMilli / idleGpuMilli
+	q124GpuRatio := 100 * clusterFragAmount.FragAmountSumQ1Q2Q4() / idleGpuMilli
+	log.Infof("[Report]; Frag amount: %.2f; Frag ratio: %.2f%%; Q124 ratio: %.2f%%; (origin)\n", fragGpuMilli, fragGpuRatio, q124GpuRatio)
+	log.Infof("[Report]; Frag amount: %.2f; Frag ratio: %.2f%%; (bellman)\n", clusterFragBellman, 100*clusterFragBellman/idleGpuMilli)
 
-	//if clusterTotalGpus*gpushareutils.MILLI-int(idleGpuMilli) != int(clusterUsedGpuMilli) { // this prints unnecessary logs due to the int rounding error
-	//	log.Errorf("totalGpuMilli (%d) - idleGpuMilli (%d) != usedGpuMilli (%d)", clusterTotalGpus*gpushareutils.MILLI, idleGpuMilli, clusterUsedGpuMilli)
-	//}
+	if clusterTotalGpus*gpushareutils.MILLI-int(idleGpuMilli) != int(clusterUsedGpuMilli) { // this prints unnecessary logs due to the int rounding error
+		log.Errorf("totalGpuMilli (%d) - idleGpuMilli (%d) != usedGpuMilli (%d)", clusterTotalGpus*gpushareutils.MILLI, idleGpuMilli, clusterUsedGpuMilli)
+	}
 	log.Infof("[Alloc]; Used nodes: %d; Used GPUs: %d; Used GPU Milli: %d; Total GPUs: %d; Arrived GPU Milli: %d\n", clusterUsedNodes, clusterUsedGpus, clusterUsedGpuMilli, clusterTotalGpus, sim.arrPodGpuMilli)
 	s := "[Alloc]; part used GPU: "
 	for k, v := range usedGpuMap {

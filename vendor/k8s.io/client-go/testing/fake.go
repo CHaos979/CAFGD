@@ -132,7 +132,8 @@ func (c *Fake) Invokes(action Action, defaultReturnObj runtime.Object) (runtime.
 	defer c.Unlock()
 
 	actionCopy := action.DeepCopy()
-	c.actions = append(c.actions, action.DeepCopy())
+	// reduce mem use
+	// c.actions = append(c.actions, action.DeepCopy())
 	for _, reactor := range c.ReactionChain {
 		if !reactor.Handles(actionCopy) {
 			continue

@@ -1,29 +1,30 @@
 # 
 # Usage: python3 generate_run_scripts.py > run_scripts.sh
+from datetime import date
 
-
-DATE = "2025_04_10" # Used as the folder name under experiments/ to hold all log results. To avoid collision of repeated experiments, may change date or append _v1, _v2, etc.
+DATE = date.today().strftime("%Y_%m_%d") # Used as the folder name under experiments/ to hold all log results. To avoid collision of repeated experiments, may change date or append _v1, _v2, etc.
+DATE = "2025_11_9"
 REMARK = "Artifacts"
 REPEAT = 1 # Number of repetitive experiments.
 FILELIST = [
     # NOTE(lhz): the config of CAFGD need to be modified in the code.
 
     # dynamic
-    "gpudata/spec_task",
+    # "gpudata/spec_task",
 
     # static
-    "data/openb_pod_list_default",
+    # "data/openb_pod_list_default",
 
     # specific workloads
     "data/openb_pod_list_gpuspec10",
-    "data/openb_pod_list_gpuspec20",
-    "data/openb_pod_list_gpuspec25",
-    "data/openb_pod_list_gpuspec33",
+    # "data/openb_pod_list_gpuspec20",
+    # "data/openb_pod_list_gpuspec25",
+    # "data/openb_pod_list_gpuspec33",
 
-    "data/openb_pod_list_multigpu20",
-    "data/openb_pod_list_multigpu30",
-    "data/openb_pod_list_multigpu40",
-    "data/openb_pod_list_multigpu50",
+    # "data/openb_pod_list_multigpu20",
+    # "data/openb_pod_list_multigpu30",
+    # "data/openb_pod_list_multigpu40",
+    # "data/openb_pod_list_multigpu50",
 
     # NOTE(lhz): the other workloads are too small to use. 
 ]
@@ -92,7 +93,7 @@ def generate_run_scripts(asyncc=True, parallel=10):
     else:
         print('#!/bin/bash\n# cat run_scripts_%s.sh | while read i; do printf "%%q\\n" "$i"; done | xargs --max-procs=16 -I CMD bash -c CMD\n' % (DATE[-4:]))
 
-    for time in range(0,10):
+    for time in range(0,REPEAT):
         for file in FILELIST:
             filename = file.split('/')[-1]
             for id, policy, gsm, dem, nm in MethodList:  # GpuSelMethod, DimExtMethod, NormMethod
@@ -132,6 +133,6 @@ def generate_run_scripts(asyncc=True, parallel=10):
 if __name__=='__main__':
     # generate_run_scripts(asyncc=True)
     #: $ bash run_scripts.txt
-    generate_run_scripts(asyncc=True)
+    generate_run_scripts(asyncc=True, parallel=7)
     #: $ cat run_scripts.txt | while read i; do printf "%q\n" "$i"; done | xargs --max-procs=16 -I CMD bash -c CMD
 
